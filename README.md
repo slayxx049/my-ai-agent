@@ -123,7 +123,7 @@ uvicorn app:app --host 0.0.0.0 --port 8000
 5. Open the **Ports** panel. Open port `8000` in the browser. Keep its visibility **Private** while testing.
 6. The dashboard and memory API are served from the same forwarded URL. The initial SQLite database is created under `backend/`.
 
-The repository includes a dev-container setup that installs the Python dependencies and forwards port 8000. If Codespaces was already open before adding that setup, use **Codespaces: Rebuild Container** from the command palette, or install dependencies manually with `pip install -r backend/requirements.txt`.
+The repository includes a lightweight dev-container setup that forwards port 8000 without installing dependencies during container creation. After the editor opens, install the Python dependencies manually with `pip install -r backend/requirements.txt` from the repository root.
 
 ### Codespaces limitations
 
