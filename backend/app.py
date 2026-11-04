@@ -86,7 +86,7 @@ app = FastAPI(title="OMNI AI Memory API", version="0.1.0",
               description="Local-first persistent memory API for OMNI AI workspaces.")
 origins = [v.strip() for v in os.getenv(
     "OMNI_ALLOWED_ORIGINS",
-    "http://localhost:5500,http://127.0.0.1:5500,http://localhost:8000,http://127.0.0.1:8000,https://slayxx049.github.io",
+    "http://localhost:5500,http://127.0.0.1:5500,http://localhost:8000,http://127.0.0.1:8000",
 ).split(",") if v.strip()]
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=False,
                    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
