@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b10">
+  <meta name="description" content="OMNI AI — a unified control centre for models, agents and intelligent workflows.">
+  <title>OMNI AI — Unified Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" aria-label="OMNI AI home">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span class="brand-copy"><strong>OMNI<span>AI</span></strong><small>UNIFIED INTELLIGENCE</small></span>
+      </a>
+
+      <div class="workspace-switch">
+        <span class="workspace-icon">O</span>
+        <span><strong>Personal workspace</strong><small>Free workspace</small></span>
+        <span class="chevron">⌄</span>
+      </div>
+
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-item active" href="#overview" data-section="overview"><span class="nav-icon">⌂</span>Overview</a>
+        <a class="nav-item" href="#models" data-section="models"><span class="nav-icon">✳</span>Model hub <span class="nav-count">08</span></a>
+        <a class="nav-item" href="#agents" data-section="agents"><span class="nav-icon">◈</span>Agent studio <span class="nav-count">06</span></a>
+        <a class="nav-item" href="#workflows" data-section="workflows"><span class="nav-icon">⌘</span>Workflows</a>
+        <a class="nav-item" href="#activity" data-section="activity"><span class="nav-icon">◷</span>Task activity</a>
+      </nav>
+
+      <div class="nav-label tools-label">MANAGE</div>
+      <nav class="main-nav" aria-label="Management navigation">
+        <a class="nav-item muted-link" href="#connections"><span class="nav-icon">⎇</span>Connections <span class="soon-tag">LATER</span></a>
+        <a class="nav-item muted-link" href="#memory"><span class="nav-icon">▤</span>Memory & knowledge <span class="soon-tag">LATER</span></a>
+        <a class="nav-item muted-link" href="#settings"><span class="nav-icon">⚙</span>Settings <span class="soon-tag">LATER</span></a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="build-card">
+          <div class="build-card-top"><span class="pulse-dot"></span> DEVELOPMENT BUILD</div>
+          <p>OMNI is taking shape.</p>
+          <small>Model connections are not configured yet.</small>
+        </div>
+        <a class="profile-row" href="https://github.com/slayxx049/my-ai-agent" target="_blank" rel="noreferrer">
+          <span class="avatar">O</span><span><strong>Project repository</strong><small>GitHub ↗</small></span>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-area" id="overview">
+      <header class="topbar">
+        <button class="icon-button menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><b>/</b><strong>Overview</strong></div>
+        <div class="topbar-right">
+          <span class="environment"><i></i> FRONTEND PREVIEW</span>
+          <button class="icon-button" id="helpButton" aria-label="About this preview">?</button>
+          <span class="avatar top-avatar">O</span>
+        </div>
+      </header>
+
+      <div class="content-wrap">
+        <section class="welcome-row">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> YOUR INTELLIGENCE WORKSPACE</div>
+            <h1>One place.<br><em>Many minds.</em></h1>
+            <p class="welcome-subtitle">A control centre for the models, agents and tools you work with.</p>
+          </div>
+          <div class="welcome-art" aria-hidden="true">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="orbit-core"><span>O</span></div>
+            <i class="orbit-node node-a"></i><i class="orbit-node node-b"></i><i class="orbit-node node-c"></i>
+          </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Workspace metrics">
+          <article class="stat-card"><div class="stat-top"><span>MODEL PROVIDERS</span><span class="stat-icon">✳</span></div><div class="stat-value">08</div><div class="stat-foot"><span class="status-dot grey"></span> Catalogue prepared</div></article>
+          <article class="stat-card"><div class="stat-top"><span>CONNECTED MODELS</span><span class="stat-icon">⌁</span></div><div class="stat-value">00</div><div class="stat-foot"><span class="status-dot grey"></span> Awaiting configuration</div></article>
+          <article class="stat-card"><div class="stat-top"><span>AGENT BLUEPRINTS</span><span class="stat-icon">◈</span></div><div class="stat-value">06</div><div class="stat-foot"><span class="status-dot green"></span> Starter roles included</div></article>
+          <article class="stat-card"><div class="stat-top"><span>ACTIVE RUNS</span><span class="stat-icon">◷</span></div><div class="stat-value" id="activeRunCount">00</div><div class="stat-foot"><span class="status-dot grey"></span> No backend connected</div></article>
+        </section>
+
+        <section class="section-block workbench" aria-labelledby="workbench-title">
+          <div class="section-heading">
+            <div><div class="eyebrow">TASK COMPOSER</div><h2 id="workbench-title">What are we working on?</h2></div>
+            <span class="preview-pill">LOCAL PREVIEW ONLY</span>
+          </div>
+          <form class="composer" id="taskForm">
+            <label class="sr-only" for="taskPrompt">Describe a task for OMNI AI</label>
+            <textarea id="taskPrompt" rows="3" placeholder="Describe a task. For example: Research three open-source agent frameworks and compare their architecture..." required></textarea>
+            <div class="composer-footer">
+              <div class="composer-controls">
+                <label class="select-wrap"><span>ROUTING</span><select id="routingMode" aria-label="Routing mode"><option value="auto">Auto-select (planned)</option><option value="manual">Choose manually (planned)</option></select></label>
+                <label class="select-wrap"><span>WORKFLOW</span><select id="workflowMode" aria-label="Workflow mode"><option value="supervisor">Supervisor-led</option><option value="single">Single agent</option><option value="parallel">Parallel agents</option></select></label>
+              </div>
+              <button class="primary-button" type="submit">Create preview task <span>↗</span></button>
+            </div>
+          </form>
+          <div class="composer-note"><span>ⓘ</span> This is an interface preview. Tasks are stored only in this browser session; no model is called.</div>
+        </section>
+
+        <section class="section-block" id="models">
+          <div class="section-heading">
+            <div><div class="eyebrow">MODEL HUB</div><h2>Intelligence, in one place.</h2><p class="section-description">A provider catalogue for future connections. Add credentials on the backend when integrations are implemented.</p></div>
+            <a class="text-link" href="#models">View model hub <span>↗</span></a>
+          </div>
+          <div class="model-grid">
+            <article class="model-card"><div class="provider-icon openai">◎</div><div class="model-info"><strong>OpenAI</strong><small>GPT family</small></div><span class="connection-state">NOT CONNECTED</span></article>
+            <article class="model-card"><div class="provider-icon anthropic">A</div><div class="model-info"><strong>Anthropic</strong><small>Claude family</small></div><span class="connection-state">NOT CONNECTED</span></article>
+            <article class="model-card"><div class="provider-icon google">✳</div><div class="model-info"><strong>Google</strong><small>Gemini family</small></div><span class="connection-state">NOT CONNECTED</span></article>
+            <article class="model-card"><div class="provider-icon meta">∞</div><div class="model-info"><strong>Meta</strong><small>Llama family</small></div><span class="connection-state">NOT CONNECTED</span></article>
+            <article class="model-card"><div class="provider-icon deepseek">◉</div><div class="model-info"><strong>DeepSeek</strong><small>DeepSeek models</small></div><span class="connection-state">NOT CONNECTED</span></article>
+            <article class="model-card"><div class="provider-icon qwen">Q</div><div class="model-info"><strong>Qwen</strong><small>Qwen family</small></div><span class="connection-state">NOT CONNECTED</span></article>
+            <article class="model-card"><div class="provider-icon mistral">M</div><div class="model-info"><strong>Mistral</strong><small>Mistral models</small></div><span class="connection-state">NOT CONNECTED</span></article>
+            <article class="model-card"><div class="provider-icon ollama">◌</div><div class="model-info"><strong>Ollama</strong><small>Local model runtime</small></div><span class="connection-state">NOT CONNECTED</span></article>
+          </div>
+        </section>
+
+        <section class="section-block" id="agents">
+          <div class="section-heading">
+            <div><div class="eyebrow">AGENT STUDIO</div><h2>Specialists that work together.</h2><p class="section-description">Starter blueprints for a future multi-agent workspace.</p></div>
+            <span class="muted-action">6 starter blueprints</span>
+          </div>
+          <div class="agent-grid">
+            <article class="agent-card"><div class="agent-symbol violet">⌘</div><div><h3>Supervisor</h3><p>Plans tasks, delegates work and combines results.</p></div><span class="agent-tag">ORCHESTRATION</span></article>
+            <article class="agent-card"><div class="agent-symbol blue">⌕</div><div><h3>Researcher</h3><p>Finds sources, extracts evidence and summarises findings.</p></div><span class="agent-tag">RESEARCH</span></article>
+            <article class="agent-card"><div class="agent-symbol green">&lt;/&gt;</div><div><h3>Developer</h3><p>Helps design, write and review application code.</p></div><span class="agent-tag">ENGINEERING</span></article>
+            <article class="agent-card"><div class="agent-symbol amber">✎</div><div><h3>Writer</h3><p>Turns structured notes into clear documents.</p></div><span class="agent-tag">WRITING</span></article>
+            <article class="agent-card"><div class="agent-symbol rose">⌖</div><div><h3>Analyst</h3><p>Compares options and checks reasoning against evidence.</p></div><span class="agent-tag">ANALYSIS</span></article>
+            <article class="agent-card"><div class="agent-symbol cyan">✓</div><div><h3>Reviewer</h3><p>Checks outputs for completeness, consistency and errors.</p></div><span class="agent-tag">QUALITY</span></article>
+          </div>
+        </section>
+
+        <section class="section-block lower-grid" id="workflows">
+          <div>
+            <div class="section-heading compact-heading"><div><div class="eyebrow">WORKFLOW LIBRARY</div><h2>Repeatable processes.</h2></div></div>
+            <div class="workflow-list">
+              <article class="workflow-row"><span class="workflow-number">01</span><div><strong>Research & report</strong><small>Research → analyse → write → review</small></div><span class="workflow-status">BLUEPRINT</span></article>
+              <article class="workflow-row"><span class="workflow-number">02</span><div><strong>Build & review code</strong><small>Plan → implement → test → review</small></div><span class="workflow-status">BLUEPRINT</span></article>
+              <article class="workflow-row"><span class="workflow-number">03</span><div><strong>Compare model outputs</strong><small>Prompt → run models → evaluate</small></div><span class="workflow-status">BLUEPRINT</span></article>
+            </div>
+          </div>
+          <div id="activity">
+            <div class="section-heading compact-heading"><div><div class="eyebrow">RECENT ACTIVITY</div><h2>Task monitor.</h2></div><span class="live-label"><i></i> LOCAL</span></div>
+            <div class="activity-panel" id="activityPanel">
+              <div class="empty-state"><span class="empty-orbit">◌</span><strong>Nothing running yet</strong><small>Create a preview task above to see it appear here.</small></div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <span>OMNI AI <b>·</b> BUILDING UNIFIED INTELLIGENCE</span>
+          <span>PHASE 01 <b>·</b> FRONTEND FOUNDATION</span>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog class="info-dialog" id="infoDialog">
+    <div class="dialog-mark">i</div><h2>OMNI frontend preview</h2>
+    <p>This first build is a static dashboard. Provider cards and agent blueprints describe the planned system; they are not connected to live models yet. The task composer only adds a temporary item in your current browser session.</p>
+    <button class="primary-button dialog-close" id="closeDialog">Understood</button>
+  </dialog>
+</body>
+</html>
