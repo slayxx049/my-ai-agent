@@ -65,18 +65,80 @@
     activeRunCount.textContent = "00";
   }
 
-  taskForm.addEventListener("submit", (event) => {
+  const answerPanel = document.querySelector("#answerPanel");
+  const answerContent = document.querySelector("#answerContent");
+  const answerReview = document.querySelector("#answerReview");
+  const answerModels = document.querySelector("#answerModels");
+  const answerMeta = document.querySelector("#answerMeta");
+  const answerScope = document.querySelector("#answerScope");
+  let lastFinalAnswer = "";
+
+  taskForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const prompt = taskPrompt.value.trim();
-    if (!prompt) {
-      showToast("Enter a task description first.");
+    const question = taskPrompt.value.trim();
+    if (question.length < 3) {
+      showToast("Enter a question or task first.");
       taskPrompt.focus();
       return;
     }
 
-    addPreviewTask(prompt, document.querySelector("#workflowMode").value);
-    taskPrompt.value = "";
-    showToast("Preview task added. No AI model was called.");
+    const button = document.querySelector("#askModelsButton");
+    const originalLabel = button.innerHTML;
+    button.disabled = true;
+    button.textContent = "Consulting models…";
+    answerPanel.hidden = false;
+    answerContent.textContent = "OMNI is collecting independent model responses, synthesizing them and running a separate consistency review.";
+    answerReview.textContent = "";
+    answerModels.textContent = "";
+    answerScope.textContent = "";
+    answerMeta.textContent = "Running multi-model review…";
+
+    try {
+      const response = await fetch(memoryApiBase + "/api/answer", {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        credentials: "same-origin",
+        body: JSON.stringify({
+          question,
+          workspace: document.querySelector("#answerWorkspace").value,
+          mode: document.querySelector("#answerMode").value
+        })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.detail || ("OMNI request failed: " + response.status));
+      lastFinalAnswer = data.answer || "";
+      answerContent.textContent = lastFinalAnswer;
+      const used = Array.isArray(data.models_used) ? data.models_used : [];
+      const failed = Array.isArray(data.failed_models) ? data.failed_models : [];
+      answerMeta.textContent = used.length + " independent model response(s) · 1 synthesis · 1 reviewer";
+      answerReview.textContent = data.review_notes || "No review notes returned.";
+      answerModels.textContent = "Models used: " + used.join(", ") + (failed.length ? "\\nUnavailable: " + failed.join(", ") : "");
+      answerScope.textContent = data.verification_scope || "Cross-model review is not proof of accuracy.";
+      answerPanel.scrollIntoView({behavior:"smooth", block:"start"});
+      showToast("OMNI produced one consolidated answer.");
+    } catch (error) {
+      lastFinalAnswer = "";
+      answerContent.textContent = error.message || "The multi-model request failed.";
+      answerMeta.textContent = "Answer not produced";
+      answerScope.textContent = "OMNI does not silently fall back to a single model when the ensemble cannot run.";
+      showToast(error.message || "Could not contact the answer engine.");
+    } finally {
+      button.disabled = false;
+      button.innerHTML = originalLabel;
+    }
+  });
+
+  document.querySelector("#copyAnswer").addEventListener("click", async () => {
+    if (!lastFinalAnswer) {
+      showToast("There is no completed answer to copy.");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(lastFinalAnswer);
+      showToast("Final answer copied.");
+    } catch (error) {
+      showToast("Clipboard access is unavailable in this browser.");
+    }
   });
 
   navItems.forEach((item) => {
