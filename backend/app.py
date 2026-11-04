@@ -9,6 +9,8 @@ from uuid import uuid4
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import Boolean, DateTime, JSON, String, Text, create_engine, desc, or_, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
@@ -91,6 +93,16 @@ origins = [v.strip() for v in os.getenv(
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=False,
                    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
                    allow_headers=["Content-Type"])
+
+
+# Serve the web dashboard and its API from one origin in Codespaces.
+# This avoids localhost/CORS mismatches in the browser preview.
+app.mount("/assets", StaticFiles(directory=ROOT / "assets"), name="assets")
+
+
+@app.get("/", include_in_schema=False)
+def dashboard():
+    return FileResponse(ROOT / "index.html")
 
 
 @app.on_event("startup")
