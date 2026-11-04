@@ -130,3 +130,10 @@ The repository includes a lightweight dev-container setup that forwards port 800
 Codespaces is for development and previews. Its compute stops when the codespace stops or times out, so the app is not continuously available. Personal GitHub Free accounts currently include 120 core-hours and 15 GB-month of Codespaces storage; check your account's usage page before creating or resizing a machine. <https://docs.github.com/en/billing/reference/product-usage-included>
 
 For a public always-on app, deploy the frontend, API and persistent database as separate services. Do not use a temporary Codespaces preview as the production memory database.
+
+
+## Persistent cloud memory with Supabase
+
+OMNI supports a PostgreSQL `DATABASE_URL`. For GitHub Codespaces, configure the Supabase **Session pooler** connection URI as a Codespaces secret named `DATABASE_URL`. The backend normalises Supabase's PostgreSQL URI for psycopg 3 and enforces TLS.
+
+Follow [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md) for project setup, secure secret injection, health verification and migration of the existing Codespace SQLite memories. Keep the Codespaces port private; the current API is not yet authenticated for public deployment.
