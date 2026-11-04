@@ -112,7 +112,7 @@
       const failed = Array.isArray(data.failed_models) ? data.failed_models : [];
       answerMeta.textContent = used.length + " independent model response(s) · 1 synthesis · 1 reviewer";
       answerReview.textContent = data.review_notes || "No review notes returned.";
-      answerModels.textContent = "Models used: " + used.join(", ") + (failed.length ? "\\nUnavailable: " + failed.join(", ") : "");
+      answerModels.textContent = "Models used: " + used.join(", ") + (failed.length ? "\nUnavailable: " + failed.join(", ") : "");
       answerScope.textContent = data.verification_scope || "Cross-model review is not proof of accuracy.";
       answerPanel.scrollIntoView({behavior:"smooth", block:"start"});
       showToast("OMNI produced one consolidated answer.");
@@ -182,6 +182,7 @@
   const memorySearch = document.querySelector("#memorySearch");
   const memoryFilter = document.querySelector("#memoryFilter");
   let memorySearchTimer;
+  const ensembleStatus = document.querySelector("#ensembleStatus");
 
   function setMemoryStatus(online,label){
     memoryStatus.textContent=label;
@@ -277,5 +278,26 @@
     });
   });
   checkMemoryConnection();
+
+  async function checkEnsembleStatus() {
+    try {
+      const response = await fetch(memoryApiBase + "/api/ensemble/status", {credentials:"same-origin"});
+      if (!response.ok) throw new Error("Status request failed");
+      const data = await response.json();
+      if (data.ready) {
+        ensembleStatus.textContent = data.configured_model_count + " MODELS CONFIGURED";
+        ensembleStatus.classList.add("ready");
+        ensembleStatus.classList.remove("missing");
+      } else {
+        ensembleStatus.textContent = "ADD AT LEAST 2 MODELS";
+        ensembleStatus.classList.add("missing");
+        ensembleStatus.classList.remove("ready");
+      }
+    } catch (error) {
+      ensembleStatus.textContent = "MODEL STATUS UNAVAILABLE";
+      ensembleStatus.classList.add("missing");
+    }
+  }
+  checkEnsembleStatus();
 
 })();
