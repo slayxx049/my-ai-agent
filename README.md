@@ -171,3 +171,12 @@ Each request makes parallel independent model calls, one synthesis call, one rev
 ### Accuracy and verification limits
 
 Multi-model synthesis can improve coverage and expose disagreements, but it cannot guarantee 100% accuracy. Models can share errors or repeat unsupported claims. The reviewer checks consistency across supplied responses; it does **not** independently browse or verify external sources. Connect explicit search/retrieval tools and source-backed verification before treating current or high-impact claims as verified. OMNI requires at least two successful independent responses and does not silently return a single-model answer when the ensemble fails.
+
+
+## Configure multi-model answers
+
+See [docs/ENSEMBLE_SETUP.md](docs/ENSEMBLE_SETUP.md) for the complete setup.
+
+OMNI asks every model ID in `OMNI_ANSWER_MODELS` independently (up to six), then makes one synthesis call, one separate consistency-review call and one final revision call. At least two independent models must respond successfully. This multi-call approach increases API usage and can incur provider charges.
+
+The dashboard's model-readiness indicator checks configuration only; it does not test provider credentials until you submit a question.
