@@ -92,17 +92,22 @@
             <span class="preview-pill">LOCAL PREVIEW ONLY</span>
           </div>
           <form class="composer" id="taskForm">
-            <label class="sr-only" for="taskPrompt">Describe a task for OMNI AI</label>
-            <textarea id="taskPrompt" rows="3" placeholder="Describe a task. For example: Research three open-source agent frameworks and compare their architecture..." required></textarea>
+            <label class="sr-only" for="taskPrompt">Ask a question to OMNI AI</label>
+            <textarea id="taskPrompt" rows="3" placeholder="Ask a question or describe a task. OMNI will consult every configured model, combine the responses and run a separate review..." required></textarea>
             <div class="composer-footer">
               <div class="composer-controls">
-                <label class="select-wrap"><span>ROUTING</span><select id="routingMode" aria-label="Routing mode"><option value="auto">Auto-select (planned)</option><option value="manual">Choose manually (planned)</option></select></label>
-                <label class="select-wrap"><span>WORKFLOW</span><select id="workflowMode" aria-label="Workflow mode"><option value="supervisor">Supervisor-led</option><option value="single">Single agent</option><option value="parallel">Parallel agents</option></select></label>
+                <label class="select-wrap"><span>WORKSPACE</span><select id="answerWorkspace" aria-label="Answer workspace"><option value="general">General</option><option value="coding">Coding</option><option value="youtube">YouTube</option><option value="creative">Creative</option><option value="drawing">Drawing</option><option value="automation">Automation</option><option value="email">Email</option></select></label>
+                <label class="select-wrap"><span>REVIEW</span><select id="answerMode" aria-label="Review depth"><option value="balanced">Balanced</option><option value="thorough">Thorough</option></select></label>
               </div>
-              <button class="primary-button" type="submit">Create preview task <span>↗</span></button>
+              <button class="primary-button" id="askModelsButton" type="submit">Ask all models <span>↗</span></button>
             </div>
           </form>
-          <div class="composer-note"><span>ⓘ</span> This is an interface preview. Tasks are stored only in this browser session; no model is called.</div>
+          <div class="composer-note"><span>ⓘ</span> OMNI asks every configured model independently, synthesizes one answer and runs a separate consistency review. Agreement does not guarantee truth; external claims may still need source verification.</div>
+          <section class="answer-panel" id="answerPanel" hidden aria-live="polite">
+            <div class="answer-panel-head"><div><div class="eyebrow">OMNI CONSOLIDATED RESPONSE</div><small id="answerMeta">Waiting for a completed run</small></div><button class="memory-action" id="copyAnswer" type="button">COPY ANSWER</button></div>
+            <div class="answer-content" id="answerContent"></div>
+            <details class="answer-audit"><summary>How OMNI reviewed this answer</summary><div id="answerReview"></div><div id="answerModels" class="answer-models"></div><p id="answerScope" class="answer-scope"></p></details>
+          </section>
         </section>
 
         <section class="section-block" id="models">
