@@ -106,3 +106,27 @@ This starter API has no user authentication and is intended for local developmen
 ## Optional PostgreSQL + pgvector
 
 Docker Compose is included for the later PostgreSQL setup. Copy `.env.example` to `.env`, replace the sample password, then start the database with `docker compose up -d`. Configure `DATABASE_URL` in `.env` and run the API from the backend folder. SQLite is simplest for the first test and needs no Docker.
+
+
+## Run OMNI in a browser with GitHub Codespaces
+
+1. Open this repository on GitHub.
+2. Select **Code → Codespaces → Create codespace on main**.
+3. Wait for the browser editor to finish preparing the environment.
+4. In its terminal, run:
+
+```bash
+cd backend
+uvicorn app:app --host 0.0.0.0 --port 8000
+```
+
+5. Open the **Ports** panel. Open port `8000` in the browser. Keep its visibility **Private** while testing.
+6. The dashboard and memory API are served from the same forwarded URL. The initial SQLite database is created under `backend/`.
+
+The repository includes a dev-container setup that installs the Python dependencies and forwards port 8000. If Codespaces was already open before adding that setup, use **Codespaces: Rebuild Container** from the command palette, or install dependencies manually with `pip install -r backend/requirements.txt`.
+
+### Codespaces limitations
+
+Codespaces is for development and previews. Its compute stops when the codespace stops or times out, so the app is not continuously available. Personal GitHub Free accounts currently include 120 core-hours and 15 GB-month of Codespaces storage; check your account's usage page before creating or resizing a machine. <https://docs.github.com/en/billing/reference/product-usage-included>
+
+For a public always-on app, deploy the frontend, API and persistent database as separate services. Do not use a temporary Codespaces preview as the production memory database.
