@@ -112,7 +112,7 @@
 
 
   // The memory API runs as a separate local service. Configure a secured HTTPS URL for deployment.
-  const memoryApiBase = String(window.OMNI_API_BASE || "http://127.0.0.1:8000").replace(/\/$/, "");
+  const memoryApiBase = String(window.OMNI_API_BASE || (["localhost", "127.0.0.1"].includes(window.location.hostname) ? "http://127.0.0.1:8000" : window.location.origin)).replace(/\/$/, "");
   const memoryForm = document.querySelector("#memoryForm");
   const memoryList = document.querySelector("#memoryList");
   const memoryStatus = document.querySelector("#memoryStatus");
