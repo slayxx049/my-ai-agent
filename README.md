@@ -74,3 +74,35 @@ GitHub Pages hosts the static frontend. The future FastAPI backend will need a s
 ## License
 
 No license has been added yet. All rights remain with the repository owner unless a license is added.
+
+
+## Run the memory backend locally (Windows)
+
+GitHub Pages serves only the static website. Run the Python API locally for the first memory test.
+
+1. Install Python 3.11 or newer.
+2. Open PowerShell in the repository folder and run:
+
+```powershell
+cd backend
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn app:app --reload --host 127.0.0.1 --port 8000
+```
+
+The first run creates a local SQLite database file in the backend folder. Keep this terminal open.
+
+3. Open a second PowerShell window in the repository root and run:
+
+```powershell
+py -m http.server 5500
+```
+
+4. Visit `http://127.0.0.1:5500` and select **Memory Studio**.
+
+This starter API has no user authentication and is intended for local development only. Do not expose it to the public internet or bind it to `0.0.0.0`. Before public deployment, add authentication, per-user data isolation, rate limiting, TLS and backups.
+
+## Optional PostgreSQL + pgvector
+
+Docker Compose is included for the later PostgreSQL setup. Copy `.env.example` to `.env`, replace the sample password, then start the database with `docker compose up -d`. Configure `DATABASE_URL` in `.env` and run the API from the backend folder. SQLite is simplest for the first test and needs no Docker.
