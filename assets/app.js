@@ -110,7 +110,7 @@
       answerContent.textContent = lastFinalAnswer;
       const used = Array.isArray(data.models_used) ? data.models_used : [];
       const failed = Array.isArray(data.failed_models) ? data.failed_models : [];
-      answerMeta.textContent = used.length + " independent model response(s) · 1 synthesis · 1 reviewer";
+      answerMeta.textContent = used.length + " independent response(s) · synthesis · review · final revision";
       answerReview.textContent = data.review_notes || "No review notes returned.";
       answerModels.textContent = "Models used: " + used.join(", ") + (failed.length ? "\nUnavailable: " + failed.join(", ") : "");
       answerScope.textContent = data.verification_scope || "Cross-model review is not proof of accuracy.";
