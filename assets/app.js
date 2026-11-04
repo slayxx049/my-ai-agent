@@ -157,7 +157,7 @@
     if(memorySearch.value.trim())params.set("q",memorySearch.value.trim());
     params.set("limit","100");
     try{
-      const response=await fetch(memoryApiBase+"/api/memories?"+params.toString(),{credentials:"omit"});
+      const response=await fetch(memoryApiBase+"/api/memories?"+params.toString(),{credentials:"same-origin"});
       if(!response.ok)throw new Error("Memory API returned "+response.status);
       const items=await response.json();if(!Array.isArray(items))throw new Error("Unexpected response");
       memoryCount.textContent=items.length+(items.length===1?" RECORD":" RECORDS");memoryList.replaceChildren();
@@ -167,21 +167,21 @@
   }
   async function checkMemoryConnection(){
     try{
-      const response=await fetch(memoryApiBase+"/api/health",{credentials:"omit"});if(!response.ok)throw new Error("Health check failed");
+      const response=await fetch(memoryApiBase+"/api/health",{credentials:"same-origin"});if(!response.ok)throw new Error("Health check failed");
       const result=await response.json();if(result.status!=="ok"||result.database!=="connected")throw new Error("Database not ready");
       setMemoryStatus(true,"DATABASE CONNECTED");await loadMemories();
     }catch(error){setMemoryStatus(false,"DATABASE OFFLINE");memoryCount.textContent="0 RECORDS";showMemoryEmpty("Memory database not connected","Start the local FastAPI backend, then refresh this panel.");}
   }
   async function changeMemory(id,payload){
     try{
-      const response=await fetch(memoryApiBase+"/api/memories/"+encodeURIComponent(id),{method:"PATCH",headers:{"Content-Type":"application/json"},credentials:"omit",body:JSON.stringify(payload)});
+      const response=await fetch(memoryApiBase+"/api/memories/"+encodeURIComponent(id),{method:"PATCH",headers:{"Content-Type":"application/json"},credentials:"same-origin",body:JSON.stringify(payload)});
       if(!response.ok)throw new Error("Update failed");await loadMemories();showToast("Memory updated.");
     }catch(error){showToast("Could not update memory. Check the database connection.");}
   }
   async function deleteMemory(id){
     if(!window.confirm("Delete this memory permanently?"))return;
     try{
-      const response=await fetch(memoryApiBase+"/api/memories/"+encodeURIComponent(id),{method:"DELETE",credentials:"omit"});
+      const response=await fetch(memoryApiBase+"/api/memories/"+encodeURIComponent(id),{method:"DELETE",credentials:"same-origin"});
       if(!response.ok)throw new Error("Delete failed");await loadMemories();showToast("Memory deleted.");
     }catch(error){showToast("Could not delete memory. Check the database connection.");}
   }
@@ -198,7 +198,7 @@
     if(!payload.title||!payload.content)return;
     const button=document.querySelector("#memorySaveButton");button.disabled=true;
     try{
-      const response=await fetch(memoryApiBase+"/api/memories",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"omit",body:JSON.stringify(payload)});
+      const response=await fetch(memoryApiBase+"/api/memories",{method:"POST",headers:{"Content-Type":"application/json"},credentials:"same-origin",body:JSON.stringify(payload)});
       if(!response.ok)throw new Error("Save failed");memoryForm.reset();await loadMemories();showToast("Memory saved to the database.");
     }catch(error){showToast("Could not save memory. Start the local backend first.");}
     finally{button.disabled=false;}
