@@ -137,3 +137,37 @@ For a public always-on app, deploy the frontend, API and persistent database as 
 OMNI supports a PostgreSQL `DATABASE_URL`. For GitHub Codespaces, configure the Supabase **Session pooler** connection URI as a Codespaces secret named `DATABASE_URL`. The backend normalises Supabase's PostgreSQL URI for psycopg 3 and enforces TLS.
 
 Follow [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md) for project setup, secure secret injection, health verification and migration of the existing Codespace SQLite memories. Keep the Codespaces port private; the current API is not yet authenticated for public deployment.
+
+
+## Multi-model answer engine
+
+OMNI can ask every configured model independently, synthesize the responses into one answer, run a separate adversarial consistency review, and revise the final answer.
+
+### Configure the model pool
+
+Set these as **GitHub Codespaces secrets** for this repository (never commit provider keys):
+
+- `OMNI_ANSWER_MODELS`: comma-separated LiteLLM model IDs, e.g. `openai/your-model-id,anthropic/your-model-id,gemini/your-model-id`.
+- Provider credentials as required by LiteLLM, e.g. `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and `GEMINI_API_KEY`.
+- Optional `OMNI_SYNTHESIS_MODEL`: model ID used to combine and finalize the responses. Defaults to the first configured model.
+- Optional `OMNI_VERIFIER_MODEL`: model ID used for the separate consistency review. Defaults to a different configured model when possible.
+
+Use provider-supported model identifiers from the LiteLLM model/provider documentation. OMNI supports up to six configured independent answer models per request. At least two must respond successfully.
+
+### Run the answer engine
+
+After adding Codespaces secrets, stop and restart the Codespace so the new secrets are available. Install dependencies, then start the API:
+
+```bash
+cd /workspaces/my-ai-agent/backend
+python -m pip install -r requirements.txt
+python -m uvicorn app:app --host 0.0.0.0 --port 8000
+```
+
+Check `/api/ensemble/status`. It reports whether at least two model IDs are configured. Then use the dashboard's **Ask all models** composer.
+
+Each request makes parallel independent model calls, one synthesis call, one reviewer call, and one final revision call. This costs more than a single-model request and is subject to each provider's pricing, rate limits and availability.
+
+### Accuracy and verification limits
+
+Multi-model synthesis can improve coverage and expose disagreements, but it cannot guarantee 100% accuracy. Models can share errors or repeat unsupported claims. The reviewer checks consistency across supplied responses; it does **not** independently browse or verify external sources. Connect explicit search/retrieval tools and source-backed verification before treating current or high-impact claims as verified. OMNI requires at least two successful independent responses and does not silently return a single-model answer when the ensemble fails.
