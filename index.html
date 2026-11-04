@@ -38,7 +38,7 @@
       <div class="nav-label tools-label">MANAGE</div>
       <nav class="main-nav" aria-label="Management navigation">
         <a class="nav-item muted-link" href="#connections"><span class="nav-icon">⎇</span>Connections <span class="soon-tag">LATER</span></a>
-        <a class="nav-item muted-link" href="#memory"><span class="nav-icon">▤</span>Memory & knowledge <span class="soon-tag">LATER</span></a>
+        <a class="nav-item" href="#memory" data-section="memory"><span class="nav-icon">▤</span>Memory studio</a>
         <a class="nav-item muted-link" href="#settings"><span class="nav-icon">⚙</span>Settings <span class="soon-tag">LATER</span></a>
       </nav>
 
@@ -134,6 +134,41 @@
             <article class="agent-card"><div class="agent-symbol amber">✎</div><div><h3>Writer</h3><p>Turns structured notes into clear documents.</p></div><span class="agent-tag">WRITING</span></article>
             <article class="agent-card"><div class="agent-symbol rose">⌖</div><div><h3>Analyst</h3><p>Compares options and checks reasoning against evidence.</p></div><span class="agent-tag">ANALYSIS</span></article>
             <article class="agent-card"><div class="agent-symbol cyan">✓</div><div><h3>Reviewer</h3><p>Checks outputs for completeness, consistency and errors.</p></div><span class="agent-tag">QUALITY</span></article>
+          </div>
+        </section>
+
+
+        <section class="section-block" id="memory">
+          <div class="section-heading"><div><div class="eyebrow">MEMORY STUDIO</div><h2>A workspace that remembers.</h2><p class="section-description">Save project context, reusable decisions and preferences. You control what stays in memory.</p></div><span class="preview-pill" id="memoryStatus">CHECKING DATABASE</span></div>
+          <div class="memory-layout">
+            <form class="memory-compose" id="memoryForm">
+              <div class="memory-compose-heading"><span class="memory-compose-icon">＋</span><div><strong>Save a memory</strong><small>Write something OMNI should be able to recall.</small></div></div>
+              <label class="field-label" for="memoryWorkspace">WORKSPACE</label>
+              <select class="memory-field" id="memoryWorkspace" required><option value="general">General</option><option value="coding">Coding</option><option value="youtube">YouTube production</option><option value="creative">Creative projects</option><option value="drawing">Drawing & visual art</option><option value="automation">Automation</option><option value="email">Email writing</option></select>
+              <label class="field-label" for="memoryKind">MEMORY TYPE</label>
+              <select class="memory-field" id="memoryKind" required><option value="preference">Preference</option><option value="project">Project context</option><option value="decision">Decision</option><option value="workflow">Workflow</option><option value="reference">Reference</option><option value="fact">Fact</option></select>
+              <label class="field-label" for="memoryTitle">TITLE</label><input class="memory-field" id="memoryTitle" maxlength="180" placeholder="e.g. Preferred coding style" required>
+              <label class="field-label" for="memoryContent">MEMORY</label><textarea class="memory-field memory-textarea" id="memoryContent" maxlength="12000" rows="4" placeholder="Write the context, preference, decision or reusable process..." required></textarea>
+              <label class="field-label" for="memoryTags">TAGS <span>OPTIONAL · COMMA SEPARATED</span></label><input class="memory-field" id="memoryTags" placeholder="python, project, workflow">
+              <button class="primary-button memory-save-button" id="memorySaveButton" type="submit">Save to database <span>↗</span></button>
+              <p class="memory-privacy-note">Never save passwords, API keys, private tokens or recovery codes. Email bodies and private files are not imported automatically.</p>
+            </form>
+            <div class="memory-browser">
+              <div class="memory-browser-top"><div><strong>Your saved memories</strong><small id="memoryCount">0 RECORDS</small></div><button class="icon-button" type="button" id="refreshMemories" aria-label="Refresh memories">↻</button></div>
+              <div class="memory-search-row"><label class="sr-only" for="memorySearch">Search memories</label><span>⌕</span><input id="memorySearch" placeholder="Search titles and memory text..."></div>
+              <div class="memory-filter-row"><label class="sr-only" for="memoryFilter">Filter by workspace</label><select class="memory-field" id="memoryFilter"><option value="">All workspaces</option><option value="general">General</option><option value="coding">Coding</option><option value="youtube">YouTube</option><option value="creative">Creative</option><option value="drawing">Drawing</option><option value="automation">Automation</option><option value="email">Email</option></select></div>
+              <div class="memory-list" id="memoryList"><div class="memory-empty"><span>◌</span><strong>Connecting to memory database</strong><small>Saved records will appear here when the backend is running.</small></div></div>
+              <div class="memory-browser-footer"><span>EDITABLE MEMORY</span><span>YOU CONTROL RETENTION</span></div>
+            </div>
+          </div>
+          <div class="workspace-heading"><div class="eyebrow">SPECIALIST MEMORY SPACES</div><p>Each workspace keeps its own useful context while selected general memories can be shared across OMNI.</p></div>
+          <div class="memory-workspace-grid">
+            <article class="memory-workspace-card"><span class="workspace-card-icon code">⌘</span><div><strong>Code Lab</strong><small>Repositories · architecture · bug fixes · coding conventions</small></div><button type="button" data-memory-workspace="coding">Open memories ↗</button></article>
+            <article class="memory-workspace-card"><span class="workspace-card-icon video">▶</span><div><strong>YouTube Studio</strong><small>Channel voice · ideas · scripts · storyboards · thumbnails</small></div><button type="button" data-memory-workspace="youtube">Open memories ↗</button></article>
+            <article class="memory-workspace-card"><span class="workspace-card-icon creative">✳</span><div><strong>Creative Studio</strong><small>Project briefs · concepts · prompts · visual direction</small></div><button type="button" data-memory-workspace="creative">Open memories ↗</button></article>
+            <article class="memory-workspace-card"><span class="workspace-card-icon drawing">◈</span><div><strong>Drawing Desk</strong><small>Styles · palettes · canvas settings · visual references</small></div><button type="button" data-memory-workspace="drawing">Open memories ↗</button></article>
+            <article class="memory-workspace-card"><span class="workspace-card-icon automation">⌁</span><div><strong>Automation Lab</strong><small>Triggers · workflows · integrations · error resolutions</small></div><button type="button" data-memory-workspace="automation">Open memories ↗</button></article>
+            <article class="memory-workspace-card"><span class="workspace-card-icon email">✉</span><div><strong>Email Desk</strong><small>Tone · templates · structure · follow-up preferences</small></div><button type="button" data-memory-workspace="email">Open memories ↗</button></article>
           </div>
         </section>
 
