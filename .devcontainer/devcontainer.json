@@ -5,17 +5,13 @@
   "portsAttributes": {
     "8000": {
       "label": "OMNI AI dashboard and memory API",
-      "onAutoForward": "openBrowser",
+      "onAutoForward": "notify",
       "visibility": "private"
     }
   },
-  "postCreateCommand": "python -m pip install -r backend/requirements.txt",
   "customizations": {
     "vscode": {
-      "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance"
-      ]
+      "extensions": []
     }
   }
 }
