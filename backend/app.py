@@ -13,13 +13,34 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import Boolean, DateTime, JSON, String, Text, create_engine, desc, or_, select
+from sqlalchemy.engine import make_url
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / ".env")
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./omni_memory.db")
-CONNECT_ARGS = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-engine = create_engine(DATABASE_URL, connect_args=CONNECT_ARGS, pool_pre_ping=True)
+RAW_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./omni_memory.db")
+
+
+def build_database_url(raw_url: str):
+    """Normalise Supabase's PostgreSQL URI for psycopg 3 and require TLS."""
+    url = make_url(raw_url)
+    if url.drivername in ("postgres", "postgresql"):
+        url = url.set(drivername="postgresql+psycopg")
+        query = dict(url.query)
+        query.setdefault("sslmode", "require")
+        url = url.set(query=query)
+    return url
+
+
+DATABASE_URL = build_database_url(RAW_DATABASE_URL)
+IS_SQLITE = DATABASE_URL.drivername.startswith("sqlite")
+engine_options = {
+    "connect_args": {"check_same_thread": False} if IS_SQLITE else {},
+    "pool_pre_ping": True,
+}
+if not IS_SQLITE:
+    engine_options.update({"pool_size": 3, "max_overflow": 2})
+engine = create_engine(DATABASE_URL, **engine_options)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 
@@ -119,11 +140,17 @@ def get_db():
 
 
 @app.get("/api/health")
-def health() -> dict[str, str]:
+def health() -> dict[str, str | bool]:
     try:
         with engine.connect() as connection:
             connection.exec_driver_sql("SELECT 1")
-        return {"status": "ok", "service": "omni-memory-api", "database": "connected"}
+        return {
+            "status": "ok",
+            "service": "omni-memory-api",
+            "database": "connected",
+            "database_driver": engine.dialect.name,
+            "persistent_storage": engine.dialect.name == "postgresql",
+        }
     except Exception as exc:
         raise HTTPException(status_code=503, detail="Database unavailable") from exc
 
