@@ -222,7 +222,6 @@ async def _call_model(model: str, messages: list[dict[str, str]], timeout: int =
         acompletion(
             model=model,
             messages=messages,
-            temperature=0.2,
             timeout=timeout,
         ),
         timeout=timeout + 5,
@@ -251,7 +250,13 @@ def _memory_context(db: Session, workspace: str) -> str:
 
 
 async def _independent_response(model: str, question: str, workspace: str, mode: str, memory_context: str):
+    mode_guidance = (
+        "In thorough mode, examine edge cases, assumptions, alternative interpretations and failure modes. "
+        if mode == "thorough" else
+        "In balanced mode, prioritize the direct answer and the most important caveats. "
+    )
     system = (
+        mode_guidance +
         "You are an independent specialist answering a user. Solve the request on your own; "
         "do not assume other models have answered it. Be precise, distinguish facts from assumptions, "
         "show calculations when relevant, and state uncertainty. Never invent sources, quotes, URLs, "
